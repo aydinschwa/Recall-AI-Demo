@@ -19,7 +19,7 @@ router.post("/transcription", async (req, res) => {
   if (event !== "bot.transcription") {
     return res.status(200).send("OK");
   }
-  const { transcript } = data;
+  const { bot_id, transcript } = data;
   const { words } = transcript;
   const fullText = words.map((word) => word.text).join(" ");
 
@@ -47,7 +47,7 @@ router.post("/transcription", async (req, res) => {
     const { answer, query, remark } = data;
     if (answer === "YES") {
       await axios.post(
-        "https://us-west-2.recall.ai/api/v1/bot/ecec8909-4574-4256-a9d5-11f171287947/send_chat_message/",
+        `https://us-west-2.recall.ai/api/v1/bot/${bot_id}/send_chat_message/`,
         { message: remark },
         {
           headers: {
@@ -85,7 +85,7 @@ router.post("/transcription", async (req, res) => {
       });
       const message = response.choices[0].message.content;
       await axios.post(
-        "https://us-west-2.recall.ai/api/v1/bot/ecec8909-4574-4256-a9d5-11f171287947/send_chat_message/",
+        `https://us-west-2.recall.ai/api/v1/bot/${bot_id}/send_chat_message/`,
         { message: message },
         {
           headers: {
