@@ -18,8 +18,10 @@
           <div class="logo"></div>
         </div>
         <div class="description">
-          Invite a bot to your Google Meet so you can have a personal assistant
-          who will look up videos for you as you mention them.
+          You can invite Jamie Bot to your Google Meet. He'll listen to your
+          conversation without interrupting, but if you ask him to pull up a
+          video from the internet, he'll get jump on it and send you the results
+          right away.
         </div>
         <input
           type="text"
@@ -29,6 +31,7 @@
           required
         />
         <button type="submit">Invite Bot</button>
+        <div id="message" class="message"></div>
       </form>
     </div>
 
@@ -38,16 +41,29 @@
         .addEventListener("submit", async function (event) {
           event.preventDefault();
           const userInput = document.getElementById("userInput").value;
+          const messageDiv = document.getElementById("message");
+          messageDiv.textContent = "Inviting Jamie Bot...";
+          messageDiv.style.color = "black";
+          messageDiv.style.display = "block";
+
           try {
             const response = await fetch(
               `${
                 window.location.origin
               }/api/invite_bot?meetingUrl=${encodeURIComponent(userInput)}`
             );
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
             const result = await response.json();
-            console.log(result);
+            messageDiv.textContent =
+              "Congrats! Jamie Bot has been invited to your Google Meet. Expect him shortly.";
+            messageDiv.style.color = "green";
           } catch (error) {
             console.error("Error inviting bot:", error);
+            messageDiv.textContent =
+              "Error, that URL didn't work. Please double check and try again.";
+            messageDiv.style.color = "red";
           }
         });
     </script>
