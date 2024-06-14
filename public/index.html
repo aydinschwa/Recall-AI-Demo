@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recall.ai Sample App</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <form id="simpleForm">
+        <div class="heading">
+          <div class="title">Chatbot Demo</div>
+          <div class="logo"></div>
+        </div>
+        <div class="description">
+          Invite a bot to your Google Meet so you can have a personal assistant
+          who will look up videos for you as you mention them.
+        </div>
+        <input
+          type="text"
+          id="userInput"
+          name="userInput"
+          placeholder="Add Google Meet URL"
+          required
+        />
+        <button type="submit">Invite Bot</button>
+      </form>
+    </div>
+
+    <script>
+      document
+        .getElementById("simpleForm")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+          const userInput = document.getElementById("userInput").value;
+          try {
+            const response = await fetch(
+              `${
+                window.location.origin
+              }/api/invite_bot?meetingUrl=${encodeURIComponent(userInput)}`
+            );
+            const result = await response.json();
+            console.log(result);
+          } catch (error) {
+            console.error("Error inviting bot:", error);
+          }
+        });
+    </script>
+  </body>
+</html>
