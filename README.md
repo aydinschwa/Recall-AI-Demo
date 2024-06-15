@@ -1,8 +1,12 @@
 # Podcast Assistant Bot Demo - Recall.ai
 
-This is a sample app that demonstrates how to create a podcast assistant bot using [Recall.ai](https://recall.ai), [Deepgram](https://deepgram.com), and [OpenAI](https://platform.openai.com/docs/overview). It's designed to be simple and easy to understand while still being powerful enough to be interesting.  
+This is a sample app that demonstrates how to create a podcast assistant bot using [Recall.ai](https://recall.ai), [Deepgram](https://deepgram.com), and [OpenAI](https://platform.openai.com/docs/overview). It's designed to be simple and easy to understand while still being powerful enough to be interesting.
 
-The app deploys a Google Meet bot that transcribes any speech occurring in the meeting in real time. It uses OpenAI's GPT to determine whether you're asking it a question and responds to any variation of "Hey Jamie, pull up that video about x". It will then search YouTube for the videos you're asking for and will send links to them in the chat.
+<p align="center">
+  <img src="https://github.com/aydinschwa/Recall-AI-Demo/assets/70107592/6e11dd3b-2f5a-467b-903c-e3bea12dcc37" alt="Frontend Screenshot" style="width:50%;">
+</p>
+
+The app deploys a Google Meet bot named Jamie that transcribes any speech occurring in the meeting in real time. It uses OpenAI's GPT to determine whether you're asking it a question and responds to any variation of "Hey Jamie, pull up that video about x". It will then search YouTube for the videos you're asking for and will send links to them in the chat.
 
 The app is built in Node with Express.js. It serves a static homepage to enable users to invite the bot via a Google Meet URL.
 
@@ -41,15 +45,16 @@ ngrok http --domain {YOUR_STATIC_DOMAIN} 3000
 ```
 
 ### Configure Environment
-Let's get our environment set up now so we don't have to worry about it later. There are five required environment variables:
+Create a `.env` file at the top level of the repo. The server is designed to check for the appropriate environment variables when it starts up and will throw an error if any are missing. Your `.env` should contain the following:
 
-- `RECALL_API_KEY`
-- `RECALL_WEBHOOK_SECRET`
-- `BACKEND_URL`
-- `DEEPGRAM_API_KEY`
-- `OPENAI_API_KEY`
-
-The server is designed to check for these variables when it starts up and will throw an error if any are missing. Create a `.env` file and start adding the environment variables.
+```
+PORT=3000
+RECALL_API_KEY=[recall_api_key]
+DEEPGRAM_API_KEY=[deepgram_api_key]
+OPENAI_API_KEY=[openai_api_key]
+RECALL_WEBHOOK_SECRET=[recall_webhook_secret]
+BACKEND_URL=[your_ngrok_static_domain]
+```
 
 To create `RECALL_WEBHOOK_SECRET`, head to the [Recall.ai webhook dashboard](https://us-west-2.recall.ai/dashboard/webhooks/) and click **Add Endpoint**. The endpoint URL should look like this:
 
@@ -57,7 +62,7 @@ To create `RECALL_WEBHOOK_SECRET`, head to the [Recall.ai webhook dashboard](htt
 {YOUR_NGROK_STATIC_DOMAIN}/webhook/transcription
 ```
 
-Copy the signing secret from the webhook's page. Also, `BACKEND_URL` is just your Ngrok static domain.
+Copy the signing secret from the webhook's page and paste it into your `.env` file.
 
 ### Run the App
 Now that the setup is done, we can finally run the app with:
@@ -66,4 +71,12 @@ Now that the setup is done, we can finally run the app with:
 npm run dev
 ```
 
-Navigate to `localhost:3000` to view the entry point for the app.
+Navigate to `localhost:3000` in your browser to view the entry point for the app.
+
+## Potential Extensions
+
+1. **Improve Context for JamieBot**: Pass the entire transcript of the conversation once the bot has been triggered. Having more context will allow JamieBot to understand more about the direction of the conversation and make more relevant searches. This can be achieved using the [Get Bot Transcript](https://docs.recall.ai/reference/bot_transcript_list) API call. 
+
+2. **Monitor Chat for Invocations**: Allow JamieBot to be invoked via voice or text. This extension would make JamieBot more versatile and user-friendly. This can be achieved using the [Receiving Chat Messages](https://docs.recall.ai/docs/receiving-chat-messages) endpoint.
+   
+3. **Enhance Search Capabilities**: Improve JamieBot's search capabilities by enabling it to search [Wikipedia](https://www.npmjs.com/package/wikipedia) or [Google](https://www.npmjs.com/package/googleapis). This would broaden the range of information JamieBot can provide, making it more useful.
