@@ -49,10 +49,10 @@ Create a `.env` file at the top level of the repo. The server is designed to che
 
 ```
 PORT=3000
+BACKEND_URL=[your_ngrok_static_domain]
 RECALL_API_KEY=[recall_api_key]
 OPENAI_API_KEY=[openai_api_key]
 RECALL_WEBHOOK_SECRET=[recall_webhook_secret]
-BACKEND_URL=[your_ngrok_static_domain]
 ```
 
 To create `RECALL_WEBHOOK_SECRET`, head to the [Recall.ai webhook dashboard](https://us-west-2.recall.ai/dashboard/webhooks/) and click **Add Endpoint**. The endpoint URL should look like this:
