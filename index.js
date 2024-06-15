@@ -7,7 +7,6 @@ const webhookRoutes = require("./routes/webhook");
 
 const app = express();
 
-// Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(bodyParser.json());
@@ -15,6 +14,7 @@ app.use(bodyParser.json());
 app.use("/api", apiRoutes);
 app.use("/webhook", webhookRoutes);
 
+// serve homepage for user to invite bot
 app.get("/", async (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
