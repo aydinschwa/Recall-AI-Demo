@@ -22,10 +22,11 @@ router.post("/transcription", async (req, res) => {
   const { bot_id, transcript } = data;
   const { words } = transcript;
   const fullText = words.map((word) => word.text).join(" ");
+  console.log(fullText)
 
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4-turbo",
       response_format: { type: "json_object" },
       messages: [
         {
@@ -36,7 +37,12 @@ router.post("/transcription", async (req, res) => {
            If the answer is "YES", formulate a query to search on Youtube that will help return the most relevant
            video to the question asked. Also, say a short sentence about how you're gonna look up that video. 
            Otherwise, you will respond with "NO".
-           Your response will be in JSON format, either {answer: "YES", query: "query to search on Youtube", remark: ""} or {answer: "NO"}.
+           The conversation snippet you will be given is generated using speech to text, and it may not completely 
+           reflect the words actually spoken. 
+           Your response will be in JSON format, either 
+           {answer: "YES", query: "query to search on Youtube", remark: ""} 
+           or 
+           {answer: "NO"}.
            Here's a snippet of their conversation:
            ${fullText}
            `,
@@ -45,6 +51,7 @@ router.post("/transcription", async (req, res) => {
     });
     const data = JSON.parse(response.choices[0].message.content);
     const { answer, query, remark } = data;
+    console.log(answer, query, remark)
     if (answer === "YES") {
       await axios.post(
         `https://us-west-2.recall.ai/api/v1/bot/${bot_id}/send_chat_message/`,
@@ -59,7 +66,7 @@ router.post("/transcription", async (req, res) => {
       );
       const videos = await getYouTubeVideos(query);
       const response = await openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
+        model: "gpt-4-turbo",
         messages: [
           {
             role: "system",
@@ -79,12 +86,17 @@ router.post("/transcription", async (req, res) => {
             URL
 
             ...
+
+            Your response must be less than 500 characters.
             `,
           },
         ],
       });
-      const message = response.choices[0].message.content;
-      await axios.post(
+      let message = response.choices[0].message.content;
+      // Trim the message to 500 characters. Max length of Google Meet chat message is 500 characters.
+      message = message.substring(0, 500); 
+      console.log(message)
+      const res = await axios.post(
         `https://us-west-2.recall.ai/api/v1/bot/${bot_id}/send_chat_message/`,
         { message: message },
         {
