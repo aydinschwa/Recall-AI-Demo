@@ -2,13 +2,12 @@
 
 This is a sample app that demonstrates how to create a podcast assistant bot using [Recall.ai](https://recall.ai), [Deepgram](https://deepgram.com), and [OpenAI](https://platform.openai.com/docs/overview). It's designed to be simple and easy to understand while still being powerful enough to be interesting.
 
-<p align="center">
-  <img src="https://github.com/aydinschwa/Recall-AI-Demo/assets/70107592/6e11dd3b-2f5a-467b-903c-e3bea12dcc37" alt="Frontend Screenshot" style="width:50%;">
-</p>
-
 The app deploys a Google Meet bot named Jamie that transcribes any speech occurring in the meeting in real time. It uses OpenAI's GPT to determine whether you're asking it a question and responds to any variation of "Hey Jamie, pull up that video about x". It will then search YouTube for the videos you're asking for and will send links to them in the chat.
 
 The app is built in Node with Express.js. It serves a static homepage to enable users to invite the bot via a Google Meet URL.
+
+## Demo
+https://www.loom.com/share/c62c1330c49d413e85db46c01cc49b16?sid=cbaa2e2b-b29d-4d9d-a362-7555d4f3dabc
 
 ## Prerequisites
 
